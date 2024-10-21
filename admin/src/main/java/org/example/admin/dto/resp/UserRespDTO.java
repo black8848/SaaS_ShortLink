@@ -6,6 +6,7 @@ import org.example.admin.common.serialize.PhoneDesensitizationSerializer;
 
 //用户返回参数响应
 @Data
+
 public class UserRespDTO {
 
     private long id;
