@@ -2,6 +2,7 @@ package org.example.admin.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.example.admin.common.enums.UserErrorCodeEnum;
 import org.example.admin.dao.entity.UserDO;
 import org.example.admin.dao.mapper.UserMapper;
 import org.example.admin.dto.req.UserRegisterReqDTO;
+import org.example.admin.dto.req.UserUpdateReqDTO;
 import org.example.admin.dto.resp.UserRespDTO;
 import org.example.admin.service.UserService;
 import org.redisson.api.RBloomFilter;
@@ -65,6 +67,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         } finally {
             lock.unlock();
         }
+    }
+
+    @Override
+    public void update(UserUpdateReqDTO requestParam) {
+        // TODO 验证当前用户名是否为登录用户名
+        LambdaUpdateWrapper<UserDO> updateWrapper = Wrappers.lambdaUpdate(UserDO.class)
+                        .eq(UserDO::getUsername, requestParam.getUsername());
+        baseMapper.update(BeanUtil.toBean(requestParam, UserDO.class), updateWrapper);
     }
 }
 
