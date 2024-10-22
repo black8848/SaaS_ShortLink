@@ -2,8 +2,10 @@ package org.example.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.example.admin.dao.entity.UserDO;
+import org.example.admin.dto.req.UserLoginReqDTO;
 import org.example.admin.dto.req.UserRegisterReqDTO;
 import org.example.admin.dto.req.UserUpdateReqDTO;
+import org.example.admin.dto.resp.UserLoginRespDTO;
 import org.example.admin.dto.resp.UserRespDTO;
 
 //用户接口层
@@ -20,4 +22,10 @@ public interface UserService extends IService<UserDO> {
 
     //用户信息修改
     void update(UserUpdateReqDTO requestParam);
+
+    //用户登录
+    UserLoginRespDTO login(UserLoginReqDTO requestParam);
+
+    //检查用户是否登录
+    boolean checkLogin(String username, String token);
 }
