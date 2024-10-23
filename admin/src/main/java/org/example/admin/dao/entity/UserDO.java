@@ -1,16 +1,13 @@
 package org.example.admin.dao.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-
-import java.util.Date;
+import org.example.admin.common.database.BaseDO;
 
 //短链接用户实体
 @Data
 @TableName("t_user")
-public class UserDO {
+public class UserDO extends BaseDO {
 
     //id
     private long id;
@@ -32,17 +29,5 @@ public class UserDO {
 
     //删除时间
     private long deletion_time;
-
-    //创建时间
-    @TableField(fill = FieldFill.INSERT)
-    private Date create_time;
-
-    //更新时间
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date update_time;
-
-    //删除标识: 0:未删除; 1:已删除
-    @TableField(fill = FieldFill.INSERT)
-    private Integer del_flag;
 
 }
