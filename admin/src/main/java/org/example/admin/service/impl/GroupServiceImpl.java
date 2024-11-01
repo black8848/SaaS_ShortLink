@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.admin.common.biz.user.UserContext;
 import org.example.admin.dao.entity.GroupDO;
 import org.example.admin.dao.mapper.GroupMapper;
+import org.example.admin.dto.req.ShortLinkGroupSortReqDTO;
 import org.example.admin.dto.req.ShortLinkGroupUpdateReqDTO;
 import org.example.admin.dto.resp.ShortLinkGroupRespDTO;
 import org.example.admin.service.GroupService;
@@ -67,6 +68,20 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, GroupDO> implemen
         GroupDO groupDO = new GroupDO();
         groupDO.setDel_flag(1);
         baseMapper.update(groupDO, updateWrapper);
+    }
+
+    @Override
+    public void sortGroup(List<ShortLinkGroupSortReqDTO> requestParam) {
+        requestParam.forEach(each -> {
+            GroupDO groupDO = GroupDO.builder()
+                    .sortOrder(each.getSortOrder())
+                    .build();
+            LambdaUpdateWrapper<GroupDO> updateWrapper = Wrappers.lambdaUpdate(GroupDO.class)
+                    .eq(GroupDO::getUsername, UserContext.getUsername())
+                    .eq(GroupDO::getGid,each.getGid())
+                    .eq(GroupDO::getDel_flag,0);
+            baseMapper.update(groupDO,updateWrapper);
+        });
     }
 
     private boolean availableGid(String gid) {
