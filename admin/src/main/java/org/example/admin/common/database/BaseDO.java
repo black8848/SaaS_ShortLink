@@ -12,13 +12,13 @@ public class BaseDO {
 
     //创建时间
     @TableField(fill = FieldFill.INSERT)
-    private Date create_time;
+    private Date createTime;
 
     //更新时间
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date update_time;
+    private Date updateTime;
 
     //删除标识: 0:未删除; 1:已删除
     @TableField(fill = FieldFill.INSERT)
-    private Integer del_flag;
+    private Integer delFlag;
 }
