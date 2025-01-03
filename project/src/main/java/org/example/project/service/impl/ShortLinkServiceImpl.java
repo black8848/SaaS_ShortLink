@@ -1,7 +1,9 @@
 package org.example.project.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.StrBuilder;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +12,9 @@ import org.example.project.common.convention.exception.ServiceException;
 import org.example.project.dao.entity.ShortLinkDO;
 import org.example.project.dao.mapper.ShortLinkMapper;
 import org.example.project.dto.req.ShortLinkCreateReqDTO;
+import org.example.project.dto.req.ShortLinkPageReqDTO;
 import org.example.project.dto.resp.ShortLinkCreateRespDTO;
+import org.example.project.dto.resp.ShortLinkPageRespDTO;
 import org.example.project.service.ShortLinkService;
 import org.example.project.toolkit.HashUtil;
 import org.redisson.api.RBloomFilter;
@@ -61,6 +65,17 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .originUrl(requestParam.getOriginUrl())
                 .fullShortUrl(shortLinkDO.getFullShortUrl())
                 .build();
+    }
+
+    @Override
+    public IPage<ShortLinkPageRespDTO> pageShortLink(ShortLinkPageReqDTO requestParam) {
+        LambdaQueryWrapper<ShortLinkDO> queryWrapper = Wrappers.lambdaQuery(ShortLinkDO.class)
+                .eq(ShortLinkDO::getGid, requestParam.getGid())
+                .eq(ShortLinkDO::getEnableStatus, 0)
+                .eq(ShortLinkDO::getDel_flag, 0)
+                .orderByDesc(ShortLinkDO::getCreate_time);
+        IPage<ShortLinkDO> resultPage = baseMapper.selectPage(requestParam, queryWrapper);
+        return resultPage.convert(each -> BeanUtil.toBean(each, ShortLinkPageRespDTO.class));
     }
 
     private String generateSuffix(ShortLinkCreateReqDTO requestParam) {
